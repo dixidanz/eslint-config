@@ -145,14 +145,14 @@ export function dixidan(
     )
   }
 
-  const formattersOptions = options.formatters === false
-    ? false
-    : {
+  const formattersOptions = options.formatters
+    ? {
         markdown: !!(options.markdown ?? true),
         astro: !!options.astro,
         html: true,
         ...(typeof options.formatters === 'object' ? options.formatters : {})
       }
+    : false
 
   if (formattersOptions) {
     configs.push(formatters(

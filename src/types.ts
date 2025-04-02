@@ -245,7 +245,7 @@ export interface OptionsConfig extends OptionsComponentExts {
    *
    * When set to `true`, it will enable all formatters.
    *
-   * @default { markdown: options.markdown, astro: options.astro, html: true }
+   * @default false
    */
   formatters?: boolean | OptionsFormatters
 

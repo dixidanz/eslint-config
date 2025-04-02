@@ -1,5 +1,6 @@
 import { dixidan } from './src'
 
 export default dixidan({
-  astro: true
+  astro: true,
+  formatters: true
 })
