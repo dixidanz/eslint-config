@@ -3,7 +3,7 @@ import { isPackageExists } from 'local-pkg'
 import type { Awaitable, OptionsConfig, TypedFlatConfigItem } from './types'
 import type { RuleOptions } from './typegen'
 import type { Linter } from 'eslint'
-import { ignores, javascript, typescript, stylistic, vue, node, unocss } from './configs'
+import { ignores, javascript, typescript, stylistic, vue, node, unocss, imports, jsonc, sortPackageJson, sortTsconfig, yaml, sortPnpmWorkspace, astro, toml, formatters, markdown, regexp, jsx, test } from './configs'
 
 export const defaultPluginRenaming = {
   '@stylistic': 'style',
@@ -27,7 +27,9 @@ export function dixidan(
 ) {
   const {
     componentExts = [],
+    astro: enableAstro = false,
     jsx: enableJsx = true,
+    regexp: enableRegexp = true,
     typescript: enableTypeScript = isPackageExists('typescript'),
     unocss: enableUnoCSS = false,
     vue: enableVue = VuePackages.some(i => isPackageExists(i))
@@ -50,11 +52,16 @@ export function dixidan(
   configs.push(
     ignores(options.ignores),
     javascript({ overrides: getOverrides(options, 'javascript') }),
-    node()
+    node(),
+    imports()
   )
 
   if (enableVue) {
     componentExts.push('vue')
+  }
+
+  if (enableJsx) {
+    configs.push(jsx())
   }
 
   if (enableTypeScript) {
@@ -72,6 +79,16 @@ export function dixidan(
     }))
   }
 
+  if (enableRegexp) {
+    configs.push(regexp(typeof enableRegexp === 'boolean' ? {} : enableRegexp))
+  }
+
+  if (options.test ?? true) {
+    configs.push(test({
+      overrides: getOverrides(options, 'test')
+    }))
+  }
+
   if (enableVue) {
     configs.push(vue({
       overrides: getOverrides(options, 'vue'),
@@ -84,6 +101,63 @@ export function dixidan(
       ...resolveSubOptions(options, 'unocss'),
       overrides: getOverrides(options, 'unocss')
     }))
+  }
+
+  if (enableAstro) {
+    configs.push(astro({
+      overrides: getOverrides(options, 'astro')
+    }))
+  }
+
+  if (options.jsonc ?? true) {
+    configs.push(
+      jsonc({
+        overrides: getOverrides(options, 'jsonc')
+      }),
+      sortPackageJson(),
+      sortTsconfig()
+    )
+  }
+
+  if (options.yaml ?? true) {
+    configs.push(
+      yaml({
+        overrides: getOverrides(options, 'yaml')
+      }),
+      sortPnpmWorkspace()
+    )
+  }
+
+  if (options.toml ?? true) {
+    configs.push(toml({
+      overrides: getOverrides(options, 'toml')
+    }))
+  }
+
+  if (options.markdown ?? true) {
+    configs.push(
+      markdown(
+        {
+          componentExts,
+          overrides: getOverrides(options, 'markdown')
+        }
+      )
+    )
+  }
+
+  const formattersOptions = options.formatters === false
+    ? false
+    : {
+        markdown: !!(options.markdown ?? true),
+        astro: !!options.astro,
+        html: true,
+        ...(typeof options.formatters === 'object' ? options.formatters : {})
+      }
+
+  if (formattersOptions) {
+    configs.push(formatters(
+      formattersOptions
+    ))
   }
 
   let composer = new FlatConfigComposer()

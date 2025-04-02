@@ -1,3 +1,5 @@
 import { dixidan } from './src'
 
-export default dixidan()
+export default dixidan({
+  astro: true
+})

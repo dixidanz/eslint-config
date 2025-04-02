@@ -6,6 +6,27 @@ import { isPackageExists } from 'local-pkg'
 const scopeUrl = fileURLToPath(new URL('.', import.meta.url))
 const isCwdInScope = isPackageExists('@dixidan/eslint-config')
 
+export const parserPlain = {
+  meta: {
+    name: 'parser-plain'
+  },
+  parseForESLint: (code: string) => ({
+    ast: {
+      body: [],
+      comments: [],
+      loc: { end: code.length, start: 0 },
+      range: [0, code.length],
+      tokens: [],
+      type: 'Program'
+    },
+    scopeManager: null,
+    services: { isPlain: true },
+    visitorKeys: {
+      Program: []
+    }
+  })
+}
+
 export async function interopDefault<T>(m: Awaitable<T>): Promise<T extends { default: infer U } ? U : T> {
   const resolved = await m
   return (resolved as any).default || resolved

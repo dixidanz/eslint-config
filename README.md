@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/@dixidan/eslint-config?color=444&label=)](https://npmjs.com/package/@dixidan/eslint-config)
 
 > forked from [@antfu/eslint-config](https://github.com/antfu/eslint-config).
-> 
+
 ### Install
 
 ```bash
