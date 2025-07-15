@@ -153,6 +153,9 @@ export async function vue(
         'vue/space-infix-ops': 'error',
         'vue/space-unary-ops': ['error', { nonwords: false, words: true }],
         'vue/template-curly-spacing': 'error',
+        'vue/html-self-closing': ['warn', {
+          html: { normal: 'never', void: 'always' }
+        }],
 
         ...overrides
       }

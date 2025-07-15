@@ -49,7 +49,8 @@ export async function javascript(
             argsIgnorePattern: '^_',
             ignoreRestSiblings: true,
             vars: 'all',
-            varsIgnorePattern: '^_'
+            varsIgnorePattern: '^_',
+            caughtErrors: 'none'
           }
         ],
         'array-callback-return': 'error',
