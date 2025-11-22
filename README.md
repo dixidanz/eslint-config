@@ -18,3 +18,21 @@ import dixidan from '@dixidan/eslint-config'
 
 export default dixidan()
 ```
+
+### Install simple-git-hooks and lint-staged
+
+```bash
+pnpm i -D simple-git-hooks lint-staged
+
+```
+
+Add the following to your package.json
+
+```json
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+```
